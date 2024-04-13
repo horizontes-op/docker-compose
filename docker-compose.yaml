@@ -147,6 +147,7 @@ services:
       - spring.datasource.username=store
       - spring.datasource.password=store
       - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
+      - OPENAI_API_KEY=$OPENAI_API_KEY
     deploy:
       mode: replicated
       replicas: 1
