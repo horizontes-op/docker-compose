@@ -1,8 +1,6 @@
 version: '3.8'
 name: store
-
 services:
-
   db-store:
     container_name: store-db-store
     image: postgres:latest
@@ -54,7 +52,7 @@ services:
 
   discovery:
     build:
-      context: ../horizontes.discovery/
+      context: ../discovery/
       dockerfile: Dockerfile
     container_name: store-discovery
     image: store-discovery:latest
@@ -66,7 +64,7 @@ services:
 
   gateway:
     build:
-      context: ../horizontes.gateway/
+      context: ../gateway/
       dockerfile: Dockerfile
     container_name: store-gateway
     image: store-gateway:latest
@@ -81,7 +79,7 @@ services:
 
   account:
     build:
-      context: ../horizontes.account-resource/
+      context: ../account-resource/
       dockerfile: Dockerfile
     image: store-account:latest
     environment:
@@ -101,7 +99,7 @@ services:
 
   aluno:
     build:
-      context: ../horizontes.aluno-resource/
+      context: ../aluno-resource/
       dockerfile: Dockerfile
     image: store-aluno:latest
     environment:
@@ -121,7 +119,7 @@ services:
 
   instituicao:
     build:
-      context: ../horizontes.instituicao-resource/
+      context: ../instituicao-resource/
       dockerfile: Dockerfile
     image: store-instituicao:latest
     environment:
@@ -138,10 +136,32 @@ services:
       - db-store
       - discovery
       - account
+  
+  recomencadacao:
+    build:
+      context: ../recomendacao-resource/
+      dockerfile: Dockerfile
+    image: store-recomendacao:latest
+    environment:
+      - spring.datasource.url=jdbc:postgresql://store-db-store:5432/store
+      - spring.datasource.username=store
+      - spring.datasource.password=store
+      - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
+    deploy:
+      mode: replicated
+      replicas: 1
+    networks:
+      - private-network
+    depends_on:
+      - db-store
+      - discovery
+      - account
+      - aluno
+      - instituicao
 
   auth:
     build:
-      context: ../horizontes.auth-resource/
+      context: ../auth-resource/
       dockerfile: Dockerfile
     image: store-auth:latest
     environment:
