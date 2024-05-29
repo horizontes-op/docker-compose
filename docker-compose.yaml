@@ -170,7 +170,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       DB_PORT: ${DB_PORT}
-      HOST_INSTITUICAO: ${HOST_INSTITUICAO}
+      HOST_GATEWAY: ${HOST_GATEWAY}
     networks:
       - private-network
     depends_on:
